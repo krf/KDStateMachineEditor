@@ -1,5 +1,5 @@
 /*
-  modifypropertycommand.h
+  reparentelementcommand.h
 
   This file is part of the KDAB State Machine Editor Library.
 
@@ -22,40 +22,43 @@
   clear to you.
 */
 
-#ifndef KDSME_COMMAND_MODIFYPROPERTYCOMMAND_H
-#define KDSME_COMMAND_MODIFYPROPERTYCOMMAND_H
+#ifndef KDSME_COMMAND_REPARENTELEMENTCOMMAND_H
+#define KDSME_COMMAND_REPARENTELEMENTCOMMAND_H
 
 #include "command.h"
 
-#include <QHash>
 #include <QPointer>
-
-class QJsonObject;
-class QVariant;
 
 namespace KDSME {
 
-class KDSME_CORE_EXPORT ModifyPropertyCommand : public KDSME::Command
+class Element;
+class View;
+
+class KDSME_VIEW_EXPORT ReparentElementCommand : public Command
 {
     Q_OBJECT
 
 public:
-    ModifyPropertyCommand(QObject* object, const char* property, const QVariant& value, const QString& text = QString(), QUndoCommand* parent = 0);
-    ModifyPropertyCommand(QObject* object, const QJsonObject& propertyMap, const QString& text = QString(), QUndoCommand* parent = 0);
+    ReparentElementCommand(View* view, Element* element, QUndoCommand* parent = 0);
 
-    virtual int id() const Q_DECL_OVERRIDE { return ModifyProperty; }
+    virtual int id() const { return ReparentElement; }
+
+    Q_INVOKABLE void setParentElement(KDSME::Element* parentElement);
 
     virtual void redo() Q_DECL_OVERRIDE;
     virtual void undo() Q_DECL_OVERRIDE;
 
 private:
-    void init();
+    QPointer<View> m_view;
+    QPointer<Element> m_element;
 
-    QPointer<QObject> m_object;
-    QHash<QByteArray, QVariant> m_propertyMap;
-    QHash<QByteArray, QVariant> m_oldPropertyMap;
+    /// Whether this command is valid (ie. if redo/undo is doing something)
+    bool m_valid;
+
+    QPointer<Element> m_newParentElement;
+    QPointer<Element> m_oldParentElement;
 };
 
 }
 
-#endif // MODIFYPROPERTYCOMMAND_H
+#endif // REPARENTELEMENTCOMMAND_H

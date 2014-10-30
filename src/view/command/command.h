@@ -1,5 +1,5 @@
 /*
-  layoutsnapshotcommand.h
+  command.h
 
   This file is part of the KDAB State Machine Editor Library.
 
@@ -22,34 +22,50 @@
   clear to you.
 */
 
-#ifndef KDSME_COMMAND_LAYOUTSNAPSHOTCOMMAND_H
-#define KDSME_COMMAND_LAYOUTSNAPSHOTCOMMAND_H
+#ifndef KDSME_COMMAND_COMMAND_H
+#define KDSME_COMMAND_COMMAND_H
 
-#include "command.h"
+#include "kdsme_view_export.h"
 
-#include <QPointer>
+#include <QUndoCommand>
 
 namespace KDSME {
+class StateModel;
 
-class View;
-
-class KDSME_CORE_EXPORT LayoutSnapshotCommand : public KDSME::Command
+class KDSME_VIEW_EXPORT Command : public QObject, public QUndoCommand
 {
     Q_OBJECT
 
 public:
-    explicit LayoutSnapshotCommand(View* view, QUndoCommand* parent = nullptr);
-    LayoutSnapshotCommand(View* view, const QString& text, QUndoCommand* parent = 0);
+    enum Id {
+        CreateElement = 0,
+        DeleteElement,
+        LayoutSnapshot,
+        ModifyProperty,
+        ModifyInitialState,
+        ModifyDefaultState,
 
-    virtual int id() const Q_DECL_OVERRIDE { return LayoutSnapshot; }
+        ReparentElement,
 
-    virtual void redo() Q_DECL_OVERRIDE;
-    virtual void undo() Q_DECL_OVERRIDE;
+        ModifyTransition,
+
+        ModifyLayoutItem,
+        ModifyTransitionLayoutItem,
+
+        ChangeStateMachine
+    };
+
+    explicit Command(StateModel* model, QUndoCommand* parent = nullptr);
+    explicit Command(const QString& text = QString(), QUndoCommand* parent = nullptr);
+
+    StateModel* model() const;
 
 private:
-    QPointer<View> m_view;
+    StateModel* m_model;
 };
 
 }
 
-#endif // LAYOUTCHANGECOMMAND_H
+Q_DECLARE_METATYPE(KDSME::Command*)
+
+#endif // COMMAND_H

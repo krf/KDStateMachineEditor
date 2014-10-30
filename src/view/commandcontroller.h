@@ -1,5 +1,5 @@
 /*
-  editcontroller.h
+  commandcontroller.h
 
   This file is part of the KDAB State Machine Editor Library.
 
@@ -22,29 +22,35 @@
   clear to you.
 */
 
-#ifndef KDSME_EDITCONTROLLER_H
-#define KDSME_EDITCONTROLLER_H
-
-#include <QObject>
+#ifndef KDSME_COMMANDCONTROLLER_H
+#define KDSME_COMMANDCONTROLLER_H
 
 #include "kdsme_core_export.h"
 
-namespace KDSME {
+#include "abstractcontroller.h"
 
-class KDSME_CORE_EXPORT EditController : public QObject
+class QUndoCommand;
+class QUndoStack;
+
+namespace KDSME {
+class Command;
+class State;
+class StateModel;
+
+class KDSME_CORE_EXPORT CommandController : public AbstractController
 {
     Q_OBJECT
-    Q_PROPERTY(bool editModeEnabled READ editModeEnabled WRITE setEditModeEnabled NOTIFY editModeEnabledChanged)
+    Q_PROPERTY(QUndoStack* undoStack READ undoStack CONSTANT)
 
 public:
-    explicit EditController(QObject* parent = nullptr);
-    virtual ~EditController();
+    explicit CommandController(QUndoStack* undoStack, StateMachineView* parent);
+    virtual ~CommandController();
 
-    bool editModeEnabled() const;
-    void setEditModeEnabled(bool editModeEnabled);
+    Q_INVOKABLE void push(KDSME::Command* command);
 
-Q_SIGNALS:
-    void editModeEnabledChanged(bool editModeEnabled);
+    void clear();
+
+    QUndoStack* undoStack() const;
 
 private:
     struct Private;
@@ -53,4 +59,6 @@ private:
 
 }
 
-#endif // EDITCONTROLLER_H
+Q_DECLARE_METATYPE(KDSME::CommandController*)
+
+#endif // COMMANDCONTROLLER_H

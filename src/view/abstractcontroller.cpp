@@ -1,5 +1,5 @@
 /*
-  commandcontroller.h
+  abstractcontroller.cpp
 
   This file is part of the KDAB State Machine Editor Library.
 
@@ -22,43 +22,33 @@
   clear to you.
 */
 
-#ifndef KDSME_COMMANDCONTROLLER_H
-#define KDSME_COMMANDCONTROLLER_H
+#include "abstractcontroller.h"
 
-#include "kdsme_core_export.h"
+#include "widgets/statemachineview.h"
 
-#include <QObject>
+using namespace KDSME;
 
-class QUndoCommand;
-class QUndoStack;
-
-namespace KDSME {
-class Command;
-class State;
-class StateModel;
-
-class KDSME_CORE_EXPORT CommandController : public QObject
+struct AbstractController::Private
 {
-    Q_OBJECT
-    Q_PROPERTY(QUndoStack* undoStack READ undoStack CONSTANT)
+    Private()
+        : m_view(nullptr)
+    {}
 
-public:
-    explicit CommandController(QUndoStack* undoStack, QObject* parent = nullptr);
-    virtual ~CommandController();
-
-    Q_INVOKABLE void push(KDSME::Command* command);
-
-    void clear();
-
-    QUndoStack* undoStack() const;
-
-private:
-    struct Private;
-    QScopedPointer<Private> d;
+    StateMachineView* m_view;
 };
 
+AbstractController::AbstractController(StateMachineView* parent)
+    : QObject(parent)
+    , d(new Private)
+{
+    d->m_view = parent;
 }
 
-Q_DECLARE_METATYPE(KDSME::CommandController*)
+AbstractController::~AbstractController()
+{
+}
 
-#endif // COMMANDCONTROLLER_H
+StateMachineView* AbstractController::stateMachineView() const
+{
+    return d->m_view;
+}

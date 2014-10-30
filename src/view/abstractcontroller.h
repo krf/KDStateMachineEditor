@@ -1,5 +1,5 @@
 /*
-  command.h
+  abstractcontroller.h
 
   This file is part of the KDAB State Machine Editor Library.
 
@@ -22,50 +22,33 @@
   clear to you.
 */
 
-#ifndef KDSME_COMMAND_COMMAND_H
-#define KDSME_COMMAND_COMMAND_H
+#ifndef KDSME_ABSTRACTCONTROLLER_H
+#define KDSME_ABSTRACTCONTROLLER_H
 
 #include "kdsme_core_export.h"
 
-#include <QUndoCommand>
+#include <QObject>
 
 namespace KDSME {
-class StateModel;
 
-class KDSME_CORE_EXPORT Command : public QObject, public QUndoCommand
+class StateMachineView;
+
+class KDSME_CORE_EXPORT AbstractController : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(KDSME::StateMachineView* stateMachineView READ stateMachineView CONSTANT)
 
 public:
-    enum Id {
-        CreateElement = 0,
-        DeleteElement,
-        LayoutSnapshot,
-        ModifyProperty,
-        ModifyInitialState,
-        ModifyDefaultState,
+    AbstractController(StateMachineView* view);
+    virtual ~AbstractController();
 
-        ReparentElement,
-
-        ModifyTransition,
-
-        ModifyLayoutItem,
-        ModifyTransitionLayoutItem,
-
-        ChangeStateMachine
-    };
-
-    explicit Command(StateModel* model, QUndoCommand* parent = nullptr);
-    explicit Command(const QString& text = QString(), QUndoCommand* parent = nullptr);
-
-    StateModel* model() const;
+    StateMachineView* stateMachineView() const;
 
 private:
-    StateModel* m_model;
+    struct Private;
+    QScopedPointer<Private> d;
 };
 
 }
 
-Q_DECLARE_METATYPE(KDSME::Command*)
-
-#endif // COMMAND_H
+#endif // ABSTRACTCONTROLLER_H
