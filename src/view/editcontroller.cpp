@@ -42,6 +42,55 @@
 
 using namespace KDSME;
 
+class KDSME::EditEvent : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(Type type MEMBER m_type CONSTANT FINAL)
+    Q_PROPERTY(KDSME::LayoutItem* target MEMBER m_target CONSTANT FINAL)
+    Q_PROPERTY(QPointF pos MEMBER m_pos CONSTANT FINAL)
+    Q_ENUMS(Type)
+
+public:
+    enum Type {
+        EditType,
+        CreateElementType
+    };
+
+    EditEvent(Type type, LayoutItem* target,const QPointF& pos);
+
+private:
+    Type m_type;
+    LayoutItem* m_target;
+    QPointF m_pos;
+};
+Q_DECLARE_METATYPE(EditEvent*)
+Q_DECLARE_METATYPE(EditEvent::Type)
+
+class CreateElementEvent : public EditEvent
+{
+    Q_OBJECT
+    Q_PROPERTY(Element::Type elementType MEMBER m_elementType CONSTANT FINAL)
+
+public:
+    explicit CreateElementEvent(LayoutItem* target, const QPointF& pos, Element::Type elementType);
+
+private:
+    Element::Type m_elementType;
+};
+
+EditEvent::EditEvent(Type type, LayoutItem* target, const QPointF& pos)
+    : m_type(type)
+    , m_target(target)
+    , m_pos(pos)
+{
+}
+
+CreateElementEvent::CreateElementEvent(LayoutItem* target, const QPointF& pos, Element::Type elementType)
+    : EditEvent(CreateElementType, target, pos)
+    , m_elementType(elementType)
+{
+}
+
 struct EditController::Private
 {
     Private();
@@ -52,7 +101,9 @@ struct EditController::Private
 EditController::Private::Private()
     : m_editModeEnabled(false)
 {
+    qRegisterMetaType<EditEvent*>();
 
+    qmlRegisterUncreatableType<EditEvent>(KDSME_QML_NAMESPACE, 1, 0, "EditEvent", "Access to object");
 }
 
 EditController::EditController(StateMachineView* parent)
@@ -132,6 +183,10 @@ bool EditController::sendDropEvent(LayoutItem* sender, LayoutItem* target, const
         return false;
 
     Element::Type type = Element::stringToType(qPrintable(typeString));
+    CreateElementEvent event(target, pos, type);
+    emit editEvent(&event);
+    return true;
+
 
     // TODO should we probably either move that command to kdstatemachine/commands
     // for reuse or even extend the existing CreateElementCommand to set optionally
@@ -203,3 +258,5 @@ bool EditController::sendDropEvent(LayoutItem* sender, LayoutItem* target, const
 
     return true;
 }
+
+#include "editcontroller.moc"

@@ -32,6 +32,7 @@
 namespace KDSME {
 
 class LayoutItem;
+class EditEvent;
 
 class KDSME_CORE_EXPORT EditController : public AbstractController
 {
@@ -51,6 +52,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void editModeEnabledChanged(bool editModeEnabled);
+    void editEvent(KDSME::EditEvent* event);
 
 private:
     struct Private;

@@ -124,7 +124,7 @@ StateMachineView::StateMachineView(QWidget* parent)
     qRegisterMetaType<CommandController*>();
 
     qRegisterMetaType<QAbstractItemModel*>();
-    qRegisterMetaType<LayoutItem*>("LayoutItem");
+    qRegisterMetaType<LayoutItem*>();
     qRegisterMetaType<LayoutProperties*>();
     qRegisterMetaType<StateLayoutItem*>();
     qRegisterMetaType<TransitionLayoutItem*>();

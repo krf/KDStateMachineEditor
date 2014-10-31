@@ -255,4 +255,21 @@ Rectangle {
         }
     }
 
+
+    CreateTransitionHelper {
+        id: createTransitionHelper
+
+        anchors.fill: parent
+    }
+
+    Connections {
+        target: editController
+        onEditEvent: {
+            console.log("event" + EditEvent.CreateElementType)
+            if (event.type === EditEvent.CreateElementType) {
+                createTransitionHelper.start(event.target, event.pos)
+            }
+        }
+    }
+
 }

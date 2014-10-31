@@ -19,6 +19,7 @@
         <file>qml/util/MoveArea.qml</file>
         <file>qml/util/SquareButton.qml</file>
         <file>qml/util/Theme.qml</file>
+        <file>qml/util/CreateTransitionHelper.qml</file>
         <file>qml/util/ToolTip.qml</file>
         <file>qml/LayoutItemLoader.qml</file>
         <file>qml/uml/UmlPseudoState.qml</file>
