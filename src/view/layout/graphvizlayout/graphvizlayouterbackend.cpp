@@ -48,9 +48,9 @@
 
 #define IF_DEBUG(x)
 
-using namespace ObjectHelper;
 using namespace KDSME;
 using namespace KDSME::GVUtils;
+using namespace ObjectHelper;
 
 namespace {
 

@@ -30,19 +30,21 @@ import com.kdab.kdsme 1.0
 
 import "uml/"
 
-Item {
+View {
     id: root
 
-    property var currentView: null
-    property var configurationController: null
+    //property var currentView: null
+    //property var configurationController: null
 
     /// Debug: Draw filled semi-opaque rectangles around regions
-    property bool debug: false
+    //property bool debug: false
 
-    width: ((currentView && currentView.rootLayoutItem) ? currentView.rootLayoutItem.pos.x + currentView.rootLayoutItem.width : 0)
-    height: ((currentView && currentView.rootLayoutItem) ? currentView.rootLayoutItem.pos.y + currentView.rootLayoutItem.height : 0)
+    //width: ((currentView && currentView.rootLayoutItem) ? currentView.rootLayoutItem.pos.x + currentView.rootLayoutItem.width : 0)
+    //height: ((currentView && currentView.rootLayoutItem) ? currentView.rootLayoutItem.pos.y + currentView.rootLayoutItem.height : 0)
 
-    transformOrigin: Item.TopLeft
+    //transformOrigin: Item.TopLeft
+
+    /*
 
     LayoutInformationModel {
         id: layoutInformationModel
@@ -56,7 +58,7 @@ Item {
             model: VisualDataModel {
                 id: visualDataModel
 
-                model: layoutInformationModel
+                model: currentView ? currentView.model : null
                 rootIndex: (typeof(myRootIndex) === 'undefined' ? visualDataModel.rootIndex : myRootIndex)
                 delegate: LayoutItemLoader {
                     id: delegate
@@ -95,5 +97,17 @@ Item {
         id: loader
 
         sourceComponent: recursiveDelegate
+    }
+
+    */
+
+
+    viewPortItem: RecursiveInstantiator {
+        id: instantiator
+
+        anchors.fill: parent
+
+        model: root.model
+        delegate: LayoutItemLoader {}
     }
 }

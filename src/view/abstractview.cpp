@@ -34,6 +34,7 @@ struct AbstractView::Private
     Private();
 
     QAbstractItemModel* m_model;
+    QuickRecursiveInstantiator* m_viewPort;
     QPointer<QItemSelectionModel> m_selectionModel;
     AbstractView::EditTriggers m_editTriggers;
     AbstractView::ViewState m_state;
@@ -41,14 +42,15 @@ struct AbstractView::Private
 
 AbstractView::Private::Private()
     : m_model(nullptr)
+    , m_viewPort(nullptr)
     , m_editTriggers(NoEditTriggers)
     , m_state(NoState)
 {
 
 }
 
-AbstractView::AbstractView(QObject* parent)
-    : QObject(parent)
+AbstractView::AbstractView(QQuickItem* parent)
+    : QQuickItem(parent)
     , d(new Private)
 {
 }
@@ -100,6 +102,16 @@ void AbstractView::setModel(QAbstractItemModel* model)
     setSelectionModel(selectionModel);
 
     emit modelChanged(d->m_model);
+}
+
+QuickRecursiveInstantiator* AbstractView::viewPortItem() const
+{
+    return d->m_viewPort;
+}
+
+void AbstractView::setViewPortItem(QuickRecursiveInstantiator* viewPort)
+{
+    d->m_viewPort = viewPort;
 }
 
 QItemSelectionModel* AbstractView::selectionModel() const

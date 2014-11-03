@@ -33,7 +33,7 @@
 #include "layoututils.h"
 #include "layoutitemwalker.h"
 #include "element.h"
-#include "view/view.h"
+#include "view.h"
 
 #include <QDebug>
 #include <QElapsedTimer>

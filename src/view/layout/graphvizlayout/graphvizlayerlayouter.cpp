@@ -27,7 +27,7 @@
 #include "graphvizlayouterbackend.h"
 #include "element.h"
 #include "layoutitem.h"
-#include "view/view.h"
+#include "view.h"
 
 #include <QDebug>
 #include <QRectF>

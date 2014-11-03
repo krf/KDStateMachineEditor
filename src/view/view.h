@@ -54,7 +54,7 @@ class KDSME_CORE_EXPORT View : public AbstractView
     Q_PROPERTY(KDSME::LayoutProperties* layoutProperties READ layoutProperties CONSTANT)
 
 public:
-    explicit View(QObject* parent = 0);
+    explicit View(QQuickItem* parent = nullptr);
     virtual ~View();
 
     StateModel* stateModel() const;

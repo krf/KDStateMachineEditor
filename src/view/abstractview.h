@@ -27,7 +27,9 @@
 
 #include "kdsme_core_export.h"
 
-#include <QObject>
+#include "quick/quickrecursiveinstantiator.h"
+
+#include <QQuickItem>
 #include <QPointer>
 
 class QAbstractItemModel;
@@ -37,14 +39,12 @@ class QModelIndex;
 
 namespace KDSME {
 
-/**
- * @brief QAbstractItemView-like class without actual visual representation (i.e. no dependency on QWidget)
- */
-class KDSME_CORE_EXPORT AbstractView : public QObject
+class KDSME_CORE_EXPORT AbstractView : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(QAbstractItemModel* model READ model WRITE setModel NOTIFY modelChanged)
     Q_PROPERTY(ViewState state READ state NOTIFY stateChanged FINAL)
+    Q_PROPERTY(QuickRecursiveInstantiator* viewPortItem READ viewPortItem WRITE setViewPortItem)
 
 public:
     enum EditTrigger {
@@ -59,7 +59,7 @@ public:
     };
     Q_ENUMS(ViewState)
 
-    explicit AbstractView(QObject* parent = nullptr);
+    explicit AbstractView(QQuickItem* parent = nullptr);
     virtual ~AbstractView();
 
     virtual void setModel(QAbstractItemModel *model);
@@ -67,6 +67,9 @@ public:
 
     virtual void setSelectionModel(QItemSelectionModel *selectionModel);
     QItemSelectionModel *selectionModel() const;
+
+    QuickRecursiveInstantiator* viewPortItem() const;
+    void setViewPortItem(QuickRecursiveInstantiator* viewPort);
 
     void setEditTriggers(EditTriggers triggers);
     EditTriggers editTriggers() const;

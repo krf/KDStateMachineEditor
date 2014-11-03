@@ -13,12 +13,21 @@ set(LIB_SRCS
   command/reparentelementcommand.cpp
   command/changestatemachinecommand.cpp
 
+  layout/layerwiselayouter.cpp
+  layout/layouter.cpp
+  layout/layoutimportexport.cpp
+  layout/layoutitem.cpp
+  layout/layoutitemmodel.cpp
+  layout/layoutproperties.cpp
+  layout/layoututils.cpp
+
   quick/qopengl2pexvertexarray.cpp # Copy because QtGui doesn't export all symbols
   quick/quickmaskedmousearea.cpp
   quick/quickpainterpath.cpp
   quick/quickpen.cpp
   quick/quickprimitiveitem.cpp
   quick/quickkdsmeglobal.cpp
+  quick/quickrecursiveinstantiator.cpp
 
   widgets/codeeditor.cpp
   widgets/propertyeditor.cpp
@@ -26,12 +35,23 @@ set(LIB_SRCS
   widgets/statemachineview.cpp
   widgets/statemachinepalettewidget.cpp
 
+  abstractview.cpp
+  view.cpp
   abstractcontroller.cpp
   commandcontroller.cpp
   configurationcontroller.cpp
   editcontroller.cpp
   semanticzoommanager.cpp
 )
+
+if(Graphviz_FOUND)
+  list(APPEND LIB_SRCS
+    layout/graphvizlayout/gvutils.cpp
+    layout/graphvizlayout/graphvizlayerlayouter.cpp
+    layout/graphvizlayout/graphvizlayouter.cpp
+    layout/graphvizlayout/graphvizlayouterbackend.cpp
+  )
+endif()
 
 set(LIB_UIS
   widgets/statepropertyeditor.ui
@@ -79,8 +99,27 @@ target_link_libraries(kdstatemachineeditor_view
     kdstatemachineeditor_core
 )
 
+if(Graphviz_FOUND)
+  target_link_libraries(kdstatemachineeditor_view LINK_PRIVATE Graphviz::gvc)
+
+  if(TARGET Graphviz::cgraph AND Graphviz_VERSION VERSION_GREATER 2.30.0)
+    message(STATUS "Enabling use of experimental 'cgraph' library of GraphViz")
+    target_link_libraries(kdstatemachineeditor_view LINK_PRIVATE Graphviz::cgraph)
+  else()
+    target_link_libraries(kdstatemachineeditor_view LINK_PRIVATE Graphviz::graph)
+  endif()
+  list(APPEND LIB_EXTRA_INCLUDES
+    # TODO: Work-around issue in graphviz/types.h header
+    # <cgraph.h> is included there, but it should rather be "cgraph.h"
+    ${Graphviz_INCLUDE_DIR}/graphviz
+  )
+  target_compile_definitions(kdstatemachineeditor_view PRIVATE -DGRAPHVIZ_MAJOR_VERSION=${Graphviz_VERSION_MAJOR} -DGRAPHVIZ_MINOR_VERSION=${Graphviz_VERSION_MINOR})
+endif()
+
+
 set(build_iface_dirs
   ${CMAKE_CURRENT_SOURCE_DIR}/command
+  ${CMAKE_CURRENT_SOURCE_DIR}/layout
 )
 
 set_target_properties(kdstatemachineeditor_view PROPERTIES SOVERSION ${KDSME_SOVERSION} VERSION ${KDSME_SOVERSION} EXPORT_NAME View)
@@ -101,9 +140,16 @@ install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/kdsme_view_export.h
 
   abstractcontroller.h
+  abstractview.h
   commandcontroller.h
   configurationcontroller.h
   editcontroller.h
+  view.h
+
+  layout/layouter.h
+  layout/layoutimportexport.h
+  layout/layoutitem.h
+  layout/layoutproperties.h
 
   widgets/propertyeditor.h
   widgets/statemachinepalettewidget.h

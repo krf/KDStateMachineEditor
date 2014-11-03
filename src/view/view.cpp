@@ -100,11 +100,12 @@ View::Private::Private(View* view)
 {
 }
 
-View::View(QObject* parent)
+View::View(QQuickItem* parent)
     : AbstractView(parent)
     , d(new Private(this))
-
 {
+    setModel(new StateModel(this));
+
     d->m_delayedImportTimer->setSingleShot(true);
     connect(d->m_delayedImportTimer, SIGNAL(timeout()), this, SLOT(import()));
 }
@@ -208,6 +209,10 @@ StateMachine* View::stateMachine() const
 
 void View::setStateMachine(StateMachine* stateMachine)
 {
+    Q_ASSERT(stateModel());
+    stateModel()->setState(stateMachine);
+    return;
+
     if (d->m_stateMachine == stateMachine)
         return;
 
@@ -246,9 +251,12 @@ void View::setLayouter(Layouter* layouter)
 
 void View::import()
 {
-    if (!d->m_stateMachine) {
+    if (!d->m_stateMachine || !viewPortItem()) {
         return;
     }
+
+    qDebug() << viewPortItem()->rootItems();
+    return;
 
     setState(ItemLayoutState);
     if (!d->m_root || d->m_reimportRequired) {

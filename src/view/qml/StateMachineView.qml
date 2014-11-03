@@ -37,7 +37,7 @@ Rectangle {
     id: root
     objectName: "stateMachineView"
 
-    property var currentView: _quickView.view
+    property var stateMachine: stateMachineScene.stateMachine
     property var commandController: _quickView.commandController
     property var configurationController: _quickView.configurationController
     property var editController: _quickView.editController
@@ -163,8 +163,13 @@ Rectangle {
                 id: stateMachineScene
                 objectName: "stateMachineScene"
 
-                currentView: root.currentView
-                configurationController: root.configurationController
+                //currentView: root.currentView
+                //configurationController: root.configurationController
+
+                // FIXME: Hack, remove
+                Component.onCompleted: {
+                    _quickView.view = stateMachineScene
+                }
             }
 
             Connections {
@@ -244,7 +249,7 @@ Rectangle {
 
             RowLayout {
                 Label {
-                    property string label: (currentView && currentView.stateMachine ? currentView.stateMachine.label : "")
+                    property string label: (stateMachine ? stateMachine.label : "")
                     text: qsTr("State Machine: ") + (label !== "" ? label : qsTr("<Unnamed>"))
                 }
                 Label { text: "|" }

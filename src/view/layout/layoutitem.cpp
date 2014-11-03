@@ -46,17 +46,15 @@ struct LayoutItem::Private
 };
 
 LayoutItem::Private::Private()
-    : m_height(0.0)
-    , m_width(0.0)
-    , m_visible(true)
+    : m_visible(true)
     , m_selected(false)
     , m_view(nullptr)
     , m_element(nullptr)
 {
 }
 
-LayoutItem::LayoutItem(QObject* parent)
-    : QObject(parent)
+LayoutItem::LayoutItem(QQuickItem* parent)
+    : QQuickItem(parent)
     , d(new Private)
 {
 }
@@ -82,34 +80,6 @@ void LayoutItem::setPos(const QPointF& pos)
 
     d->m_pos = pos;
     emit posChanged(pos);
-}
-
-qreal LayoutItem::width() const
-{
-    return d->m_width;
-}
-
-void LayoutItem::setWidth(qreal width)
-{
-    if (d->m_width == width)
-        return;
-
-    d->m_width = width;
-    emit widthChanged(width);
-}
-
-qreal LayoutItem::height() const
-{
-    return d->m_height;
-}
-
-void LayoutItem::setHeight(qreal height)
-{
-    if (d->m_height == height)
-        return;
-
-    d->m_height = height;
-    emit heightChanged(height);
 }
 
 QPointF LayoutItem::absolutePos() const

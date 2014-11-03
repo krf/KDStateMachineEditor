@@ -33,8 +33,8 @@ import "uml/"
 Item {
     id: root
 
-    x: object.pos.x
-    y: object.pos.y
+    //x: object.pos.x
+    //y: object.y
     width: loader.width
     height: loader.height
 
@@ -62,20 +62,30 @@ Item {
         asynchronous: true
 
         sourceComponent: {
+            //return umlFinalState;
+            console.log(object)
+            if (object.type === Element.StateMachineType) {
+                    return umlStateMachine;
+            } else if (object.type === Element.FinalStateType) {
+                return umlFinalState;
+            } else {
+                return null;
+            }
+
             // TODO: Can we make all this more declarative?
             if (object.type === LayoutItem.StateType) {
-                if (object.element.type === Element.StateMachineType) {
+                if (object.type === Element.StateMachineType) {
                     return umlStateMachine;
-                } else if (object.element.type === Element.FinalStateType) {
+                } else if (object.type === Element.FinalStateType) {
                     return umlFinalState;
-                } else if (object.element.type === Element.HistoryStateType) {
+                } else if (object.type === Element.HistoryStateType) {
                     return umlHistoryState;
-                } else if (object.element.type === Element.PseudoStateType) {
+                } else if (object.type === Element.PseudoStateType) {
                     return umlPseudoState;
                 } else {
                     return umlState;
                 }
-            } else if (object.type === LayoutItem.TransitionType) {
+            } else if (object.type === Element.TransitionType) {
                 return umlTransition;
             } else {
                 console.log("Unknown LayoutItem type: " + object.type);
@@ -102,8 +112,8 @@ Item {
     Component {
         id: umlFinalState
         UmlFinalState {
-            item: object
-            activeness: activenessForState(object.element)
+            //item: object
+            //activeness: activenessForState(object.element)
         }
     }
 

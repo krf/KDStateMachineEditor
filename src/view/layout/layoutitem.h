@@ -28,7 +28,7 @@
 
 #include "kdsme_core_export.h"
 
-#include <QObject>
+#include <QQuickItem>
 #include <QPainterPath>
 #include <QPointF>
 
@@ -41,13 +41,11 @@ class Transition;
 class TransitionLayoutItem;
 class View;
 
-class KDSME_CORE_EXPORT LayoutItem : public QObject
+class KDSME_CORE_EXPORT LayoutItem : public QQuickItem
 {
     Q_OBJECT
     /// The position of the element from the top-left corner
     Q_PROPERTY(QPointF pos READ pos WRITE setPos NOTIFY posChanged FINAL)
-    Q_PROPERTY(qreal width READ width WRITE setWidth NOTIFY widthChanged FINAL)
-    Q_PROPERTY(qreal height READ height WRITE setHeight NOTIFY heightChanged FINAL)
     /// Whether this item is visible in the scene
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged FINAL)
     /// Whether this item is marked as selected
@@ -65,19 +63,13 @@ public:
     };
     Q_ENUMS(Type)
 
-    explicit LayoutItem(QObject* parent = 0);
+    explicit LayoutItem(QQuickItem* parent = 0);
     virtual ~LayoutItem();
 
     virtual Type type() const;
 
     QPointF pos() const;
     void setPos(const QPointF& pos);
-
-    qreal height() const;
-    void setHeight(qreal height);
-
-    qreal width() const;
-    void setWidth(qreal width);
 
     QPointF absolutePos() const;
 
@@ -104,7 +96,6 @@ public:
 Q_SIGNALS:
     void posChanged(const QPointF& pos);
     void heightChanged(qreal height);
-    void widthChanged(qreal width);
     void visibleChanged(bool visible);
     void selectedChanged(bool selected);
     void elementChanged(Element* element);

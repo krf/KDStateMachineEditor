@@ -26,6 +26,8 @@ import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtGraphicalEffects 1.0
 
+import com.kdab.kdsme 1.0
+
 import "qrc:///kdsme/qml/util/"
 
 /**
@@ -33,9 +35,11 @@ import "qrc:///kdsme/qml/util/"
  *
  * This is a node in the form of a double-circle
  */
-UmlElement {
+StateLayoutItem {
     id: root
 
+    // HACK:
+    readonly property real activeness: 0.0
     readonly property bool active: activeness === 1.0
 
     RectangularGlow {
@@ -87,5 +91,11 @@ UmlElement {
             }
         }
     ]
+
+    Component.onCompleted: {
+        console.log("COMPL: " + object)
+
+        console.log(x + " " + y + " " + width)
+    }
 
 }

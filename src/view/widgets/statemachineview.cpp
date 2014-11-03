@@ -40,6 +40,7 @@
 #include "quick/quickprimitiveitem.h"
 #include "quick/quickmaskedmousearea.h"
 #include "quick/quickkdsmeglobal.h"
+#include "quick/quickrecursiveinstantiator.h"
 #include "element.h"
 #include "elementmodel.h"
 #include "layoutitem.h"
@@ -48,7 +49,7 @@
 #include "layoutimportexport.h"
 #include "semanticzoommanager.h"
 #include "kdsmeconstants.h"
-#include "view/view.h"
+#include "view.h"
 
 #include <QDir>
 #include <QFileInfo>
@@ -142,9 +143,15 @@ StateMachineView::StateMachineView(QWidget* parent)
     qmlRegisterType<QuickPen>(KDSME_QML_NAMESPACE, 1, 0, "Pen");
     qmlRegisterType<QuickGeometryItem>(KDSME_QML_NAMESPACE, 1, 0, "Geometry");
     qmlRegisterType<QuickPrimitiveItem>(KDSME_QML_NAMESPACE, 1, 0, "Primitive");
+    qmlRegisterType<QuickRecursiveInstantiator>(KDSME_QML_NAMESPACE, 1, 0, "RecursiveInstantiator");
+    qmlRegisterType<LayoutItem>(KDSME_QML_NAMESPACE, 1, 0, "LayoutItem");
+    qmlRegisterType<TransitionLayoutItem>(KDSME_QML_NAMESPACE, 1, 0, "TransitionLayoutItem");
+    qmlRegisterType<StateLayoutItem>(KDSME_QML_NAMESPACE, 1, 0, "StateLayoutItem");
     qmlRegisterType<LayoutItemModel>(KDSME_QML_NAMESPACE, 1, 0, "LayoutInformationModel");
     qmlRegisterType<PainterPathMask>(KDSME_QML_NAMESPACE, 1, 0, "PainterPathMask");
     qmlRegisterType<SemanticZoomManager>(KDSME_QML_NAMESPACE, 1, 0, "SemanticZoomManager");
+    qmlRegisterType<StateModel>(KDSME_QML_NAMESPACE, 1, 0, "StateModel");
+    qmlRegisterType<View>(KDSME_QML_NAMESPACE, 1, 0, "View");
 
     qmlRegisterUncreatableType<AbstractMask>(KDSME_QML_NAMESPACE, 1, 0, "AbstractMask", "Access to object");
     qmlRegisterUncreatableType<AbstractView>(KDSME_QML_NAMESPACE, 1, 0, "AbstractView", "Access to object");
@@ -152,8 +159,6 @@ StateMachineView::StateMachineView(QWidget* parent)
     qmlRegisterUncreatableType<CommandController>(KDSME_QML_NAMESPACE, 1, 0, "CommandController", "Access to object");
     qmlRegisterUncreatableType<ConfigurationController>(KDSME_QML_NAMESPACE, 1, 0, "ConfigurationController", "Access to object");
     qmlRegisterUncreatableType<LayoutItem>(KDSME_QML_NAMESPACE, 1, 0, "LayoutItem", "Access to object");
-    qmlRegisterUncreatableType<View>(KDSME_QML_NAMESPACE, 1, 0, "View", "Access to object");
-    qmlRegisterUncreatableType<StateModel>(KDSME_QML_NAMESPACE, 1, 0, "StateModel", "Access to object");
     qmlRegisterUncreatableType<Element>(KDSME_QML_NAMESPACE, 1, 0, "Element", "Access to object");
     qmlRegisterUncreatableType<HistoryState>(KDSME_QML_NAMESPACE, 1, 0, "HistoryState", "Access to object");
     qmlRegisterUncreatableType<PseudoState>(KDSME_QML_NAMESPACE, 1, 0, "PseudoState", "Access to object");

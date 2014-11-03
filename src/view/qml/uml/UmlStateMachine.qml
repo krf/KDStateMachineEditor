@@ -26,12 +26,14 @@ import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 
+import com.kdab.kdsme 1.0
+
 import "qrc:///kdsme/qml/util/"
 
 /**
  * State Machine representation
  */
-UmlElement {
+StateLayoutItem {
     id: root
 
     width: Math.max(item.width, textBox.width)

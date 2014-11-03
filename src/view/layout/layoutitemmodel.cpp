@@ -33,8 +33,8 @@
 #include <QDebug>
 #include <QPalette>
 
-using namespace ObjectHelper;
 using namespace KDSME;
+using namespace ObjectHelper;
 
 namespace {
 
@@ -66,6 +66,8 @@ View* LayoutItemModel::view() const
 
 void LayoutItemModel::setView(View* view)
 {
+// FIXME
+#if 0
     if (m_view == view)
         return;
 
@@ -83,6 +85,7 @@ void LayoutItemModel::setView(View* view)
         setRootObjects(QList<QObject*>() << m_view->rootLayoutItem());
     }
     emit viewChanged(view);
+#endif
 }
 
 void LayoutItemModel::slotBeginResetModel()
